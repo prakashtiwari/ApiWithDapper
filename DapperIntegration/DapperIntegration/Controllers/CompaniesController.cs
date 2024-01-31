@@ -1,5 +1,6 @@
 ﻿using DapperIntegration.Contracts;
 using DapperIntegration.Dto;
+using DapperIntegration.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,6 +74,11 @@ namespace DapperIntegration.Controllers
         {
             var result = await _companyRepository.GetMultipleMapping();          
             return Ok(result);
+        }
+        [HttpPost("SaveCompaniesList")]
+        public async Task SaveCompaniesList([FromBody] List<Company> companies)
+        { 
+            await _companyRepository.CreateMultipleCompanies(companies);
         }
     }
 }

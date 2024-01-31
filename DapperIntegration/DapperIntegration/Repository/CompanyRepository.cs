@@ -138,5 +138,37 @@ namespace DapperIntegration.Repository
                 return result.Distinct().ToList();
             }
         }
+        public async Task CreateMultipleCompanies(List<Company> companies)
+        {
+            string query = "Insert into Companies(Name,Address, Country) values(@Name,@Address, @Country)";
+
+            using (var con = context.CreateConnection())
+            {
+                con.Open();//Connection should be opened
+                using (var trans = con.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var company in companies)
+                        {
+                            var param = new DynamicParameters();
+                            param.Add("Name", company.Name, DbType.String);
+                            param.Add("Address", company.Address, DbType.String);
+                            param.Add("Country", company.Country, DbType.String);
+
+                            await con.ExecuteAsync(query, param, transaction: trans);
+
+
+                        }
+                        trans.Commit();
+                    }
+                    catch(Exception ex)
+                    {
+                        trans.Rollback();
+                    }
+
+                }
+            }
+        }
     }
 }

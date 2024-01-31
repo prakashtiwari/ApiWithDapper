@@ -15,5 +15,7 @@ namespace DapperIntegration.Contracts
         public Task<Company> GetMultipleResults(int id);
 
         public Task<List<Company>> GetMultipleMapping();
+
+        Task CreateMultipleCompanies(List<Company> companies);
     }
 }
